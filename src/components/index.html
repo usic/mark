@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>USIC mark | Визнач свій середній бал</title>
+    <meta charset="UTF-8">
+
+    <script>
+        Object.isInteger = function () {
+            return (this.toString().search(/^-?[0-9]+$/) == 0 );
+        };
+
+        function tvalid(input) {
+            var intRegex = /^\d+$/;
+            if (intRegex.test(input) && input > 0 && input <= 100) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        var values = {
+            level: 'Бакалавр',
+            type: {
+                regular: 'норм',
+                free: 'вибір',
+            },
+            program: ''
+        };
+
+        function generateCred(val) {
+            return (val == 1) ? 'кредит' : (val == 2 || val == 3 || val == 4) ? 'кредити' : 'кредитів';
+        }
+
+        function loadPrograms(faculty) {
+            $.ajax({
+                url: 'https://api.usic.at/api/v1/courses/programs',
+                dataType: 'jsonp',
+                type: 'get',
+                data: {faculty: faculty, level: values.level},
+                success: function (output) {
+                    var toAppend = "";
+                    $.each(output, function (i, val) {
+                        toAppend += '<li id="program">' + val + '</li>';
+                    });
+                    $('#programs_list').empty();
+                    $('#programs_list').append(toAppend);
+                    open_pop_up('#programs');
+                },
+                error: function () {
+                    //TODO Something
+                }
+            });
+        }
+
+        function loadSubjects(program, year, term) {
+            $('#term_list').css('display', 'none');
+            $.ajax({
+                url: 'https://api.usic.at/api/v1/courses/subjects',
+                dataType: 'jsonp',
+                type: 'get',
+                data: {program: program, year: year, term: term, level: values.level, type: values.type.regular},
+                success: function (output) {
+                    var toAppend = "";
+                    $.each(output, function (i, val) {
+                        if (isValidSubject(i, val)) {
+                            toAppend += '<li class="subjectListElem"><div id="delete" title="Видалити">x</div><span class="subject">' + removeBrackets(i) + '</span><input type="text" maxlength="3"><span class="credit"><span>' + val + '</span> ' + generateCred(val) + '</span></li>';
+                        }
+                    });
+                    $('#list').empty();
+                    $('#list').append(toAppend);
+                    openList();
+                },
+                error: function () {
+                    //TODO Something
+                }
+            });
+        }
+
+        function countMark() {
+            if ($('.subjectListElem').length == 0) {
+                return
+            }
+            ;
+            var sumBall = 0;
+            var sumCredits = 0;
+            var valid = true;
+            $('.subjectListElem').each(function () {
+                var ball = $('input', this).val();
+                if (!tvalid(ball)) {
+                    $('input', this).css('border-color', '#FF0000');
+                    valid = false;
+                }
+                else {
+                    $('input', this).css('border-color', '#cecece');
+                    var credits = $('.credit span', this).text();
+                    credits = parseFloat(credits);
+                    sumBall += (ball * credits);
+                    sumCredits += credits;
+                }
+            });
+            if (valid == true) {
+                var mark = sumBall / sumCredits;
+                $('#number').empty();
+                $('#number').append(mark.toFixed(2));
+                open_average('.average');
+            }
+        }
+
+        function isValidSubject(i, val) {
+            if (i.indexOf("(для іноземних студентів)") >= 0 || val == 0) {
+                return false;
+            }
+            return true;
+        }
+
+        function removeBrackets(string) {
+            var newString;
+            if (string.indexOf("(") >= 1) {
+                newString = string.substring(0, string.indexOf("("));
+                return newString;
+            }
+            return string;
+        }
+
+        function open_pop_up(box) {
+            $("#overlay1").show(100);
+            $(box).center_pop_up();
+            $(box).show(300);
+        }
+
+        function close_pop_up(box) {
+            $(box).hide(300);
+            $("#overlay1").hide(300);
+            $('#chosen_program').empty();
+            $('#year_list').hide();
+            $('#term_list').hide();
+            $('#programs_list').show();
+        }
+
+        function open_average(box) {
+            $("#overlay2").show(100);
+            $(box).center_pop_up();
+            $(box).show(300);
+            $(document).keydown(function (event) {
+                if (event.keyCode == 27) {// pressed "escape"
+                    close_average(box);
+                }
+            });
+        }
+
+        function close_average(box) {
+            $(box).hide(300);
+            $("#overlay2").hide(300);
+        }
+
+
+        function openList() {
+            close_pop_up('#programs');
+            $('.Faculty').slideUp();
+            $('.ListOfSubjects').slideDown();
+        }
+
+        function back() {
+            $('.ListOfSubjects').slideUp();
+            $('.Faculty').slideDown();
+            $('#term_list').css('display', 'none');
+        }
+
+        function openYear() {
+            $('#programs_list').hide();
+            $('#year_list').show();
+            $('#programs').animate({
+                top: ($(window).height() - $('#programs').height()) / 2 + $(window).scrollTop() + 'px',
+                left: ($(window).width() - $('#programs').width()) / 2 + $(window).scrollLeft() + 'px'
+            }, 300);
+        }
+
+        function openTerm() {
+            $('#year_list').hide();
+            $('#term_list').show();
+            $('#programs').animate({
+                top: ($(window).height() - $('#programs').height()) / 2 + $(window).scrollTop() + 'px',
+                left: ($(window).width() - $('#programs').width()) / 2 + $(window).scrollLeft() + 'px'
+            }, 300);
+        }
+
+
+        $(document).ready(function () {
+
+            var year;
+
+            jQuery.fn.center_pop_up = function () {
+                this.css('position', 'absolute');
+                this.css('top', ($(window).height() - this.height()) / 2 + $(window).scrollTop() + 'px');
+                this.css('left', ($(window).width() - this.width()) / 2 + $(window).scrollLeft() + 'px');
+            }
+
+            $('.faculty_list').click(function () {
+                var faculty = $(this).attr('id');
+                var students_name = $(this).text();
+                $('#programs h2').text(students_name);
+                loadPrograms(faculty);
+            });
+
+            $(document).keydown(function (event) {
+                if (event.keyCode == 27) {// pressed "escape"
+                    close_pop_up('#programs');
+                    $("#term_list").css('display', 'none');
+                }
+            });
+
+            $('#programs_list').on('click', '#program', function () {
+                values.program = $(this).text();
+                $('#chosen_program').text(values.program);
+                openYear();
+            });
+
+            $('#year_list li').click(function () {
+                year = $('span', this).text();
+                openTerm();
+            });
+
+            $('#term_list li').click(function () {
+                var term = $('span', this).text();
+                loadSubjects(values.program, year, term);
+            });
+
+            $("#list").on('mouseenter', '#delete',
+                    function () {
+                        $(this).parent().children('span').css('opacity', '0.5');
+                        $(this).css('opacity', '2');
+                    }
+            );
+
+            $("#list").on('mouseleave', '#delete',
+                    function () {
+                        $(this).parent().children('span').css('opacity', '1');
+                        $(this).css('opacity', '0.4');
+                    }
+            );
+
+            $("#list").on('click', '#delete',
+                    function () {
+                        $(this).parent().remove();
+                    }
+            );
+
+            $('.calc').click(function () {
+                countMark();
+            });
+
+            $(window).keydown(function (e) {
+                key = (e.keyCode) ? e.keyCode : e.which;
+                if (key == 13) {//enter
+                    $(".calc").trigger('click');
+                }
+            });
+
+            $('.add_subject input').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "https://api.usic.at/api/v1/courses/autocomplete",
+                        dataType: "jsonp",
+                        type: 'get',
+                        data: {
+                            q: request.term
+                        },
+                        success: function (output) {
+                            response($.map(output, function (item) {
+                                return {
+                                    label: item.course + " " + item.year + " - рік " + " (" + item.credits + " - " + generateCred(item.credits) + ")",
+                                    value: {
+                                        course: item.course,
+                                        credits: item.credits
+                                    }
+                                }
+                            }));
+                        }
+                    });
+                },
+                minLength: 1, limit: 3,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $(this).val('');
+                    var toAppend = '<li class="subjectListElem"><div id="delete" title="Видалити">x</div><span class="subject">' + removeBrackets(ui.item.value.course) + '</span><input type="text" maxlength="3"><span class="credit"><span>' + ui.item.value.credits + '</span> ' + generateCred(ui.item.value.credits) + '</span></li>';
+                    $('#list').append(toAppend);
+                },
+            })
+        });
+    </script>
+</head>
+<body>
+<header>
+    <h1><a href="https://usic.at">USIC</a>mark</h1>
+    <h3>Визнач свій середній бал</h3>
+</header>
+<div class="Faculty">
+
+    <div id="programs">
+        <h2></h2>
+        <span id="chosen_program"></span>
+        <ul id="programs_list">
+        </ul>
+        <ul id="year_list">
+            <li><span>1</span>-ий рік навчання</li>
+            <li><span>2</span>-ий рік навчання</li>
+            <li><span>3</span>-ий рік навчання</li>
+            <li><span>4</span>-ий рік навчання</li>
+        </ul>
+        <ul id="term_list">
+            <li><span>1</span>-ий триместр</li>
+            <li><span>2</span>-ий триместр</li>
+            <li><span>3</span>-ий триместр</li>
+        </ul>
+    </div>
+    <div id="overlay1" onclick="close_pop_up('#programs');"></div>
+</div>
+<div class="ListOfSubjects">
+    <div class="mainForList">
+        <ul id="list">
+
+        </ul>
+    </div>
+    <div class="add_subject">
+        <input type="text" placeholder="Введіть назву вибіркової дисципліни" autocomplete="on">
+    </div>
+    <div class="calc" title="Визначити середній бал"><span>Визначити</span></div>
+    <div class="average">
+        <h2>Ваш середній бал</h2>
+        <span id="number"></span>
+    </div>
+    <div id="overlay2" onclick="close_average('.average');"></div>
+    <div id="overlayBack" onclick="back();">
+        <div>
+            <span>‹</span>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
