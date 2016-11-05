@@ -1,127 +1,8 @@
 <template>
-  <div id="app" class="container">
-    <!--<ul id="marks">-->
-    <!--<li v-for="faculty in faculties" class="column three" :id="faculty.name" v-on:click="log">{{ faculty.text }}</li>-->
-    <!--</ul>-->
-    <h2>{{ getTrimester() }}</h2>
-    <div class="row faculty">ФПрН</div>
-    <div class="row">
-      <span class="three columns specialty">
-        <div class="row">біологія</div>
-        <div class="row year">
-          <span class="three columns">1</span>
-          <span class="three columns">2</span>
-          <span class="three columns">3</span>
-          <span class="three columns">4</span>
-        </div>
-        <div class="row tremester">
-          <span class="four columns">1</span>
-          <span class="four columns">2</span>
-          <span class="four columns">3</span>
-        </div>
-      </span>
-      <span class="three columns specialty">
-        <div class="row">екологія</div>
-         <div class="row year">
-          <span class="three columns">1</span>
-          <span class="three columns">2</span>
-          <span class="three columns">3</span>
-          <span class="three columns">4</span>
-        </div>
-        <div class="row tremester">
-          <span class="four columns">1</span>
-          <span class="four columns">2</span>
-          <span class="four columns">3</span>
-        </div>
-      </span>
-      <span class="three columns specialty">
-        <div class="row">фізика</div>
-         <div class="row year">
-          <span class="three columns">1</span>
-          <span class="three columns">2</span>
-          <span class="three columns">3</span>
-          <span class="three columns">4</span>
-        </div>
-        <div class="row tremester">
-          <span class="four columns">1</span>
-          <span class="four columns">2</span>
-          <span class="four columns">3</span>
-        </div>
-      </span>
-      <span class="three columns specialty">
-        <div class="row">хімія</div>
-        <div class="row year">
-          <span class="three columns">1</span>
-          <span class="three columns">2</span>
-          <span class="three columns">3</span>
-          <span class="three columns">4</span>
-        </div>
-        <div class="row tremester">
-          <span class="four columns">1</span>
-          <span class="four columns">2</span>
-          <span class="four columns">3</span>
-        </div>
-      </span>
-    </div>
-    <div class="row faculty">ФПрН</div>
-    <div class="row">
-      <span class="three columns specialty">
-        <div class="row">біологія</div>
-        <div class="row year">
-          <span class="three columns">1</span>
-          <span class="three columns">2</span>
-          <span class="three columns">3</span>
-          <span class="three columns">4</span>
-        </div>
-        <div class="row tremester">
-          <span class="four columns">1</span>
-          <span class="four columns">2</span>
-          <span class="four columns">3</span>
-        </div>
-      </span>
-      <span class="three columns specialty">
-        <div class="row">екологія</div>
-         <div class="row year">
-          <span class="three columns">1</span>
-          <span class="three columns">2</span>
-          <span class="three columns">3</span>
-          <span class="three columns">4</span>
-        </div>
-        <div class="row tremester">
-          <span class="four columns">1</span>
-          <span class="four columns">2</span>
-          <span class="four columns">3</span>
-        </div>
-      </span>
-      <span class="three columns specialty">
-        <div class="row">фізика</div>
-         <div class="row year">
-          <span class="three columns">1</span>
-          <span class="three columns">2</span>
-          <span class="three columns">3</span>
-          <span class="three columns">4</span>
-        </div>
-        <div class="row tremester">
-          <span class="four columns">1</span>
-          <span class="four columns">2</span>
-          <span class="four columns">3</span>
-        </div>
-      </span>
-      <span class="three columns specialty">
-        <div class="row">хімія</div>
-        <div class="row year">
-          <span class="three columns">1</span>
-          <span class="three columns">2</span>
-          <span class="three columns">3</span>
-          <span class="three columns">4</span>
-        </div>
-        <div class="row tremester">
-          <span class="four columns">1</span>
-          <span class="four columns">2</span>
-          <span class="four columns">3</span>
-        </div>
-      </span>
-    </div>
+  <div id="app" class="container ">
+    <ul class="row">
+      <li v-for="faculty in faculties" class="six columns blocks">{{ faculty.text }}</li>
+    </ul>
   </div>
 </template>
 
@@ -131,12 +12,12 @@ export default {
   data: function () {
     return {
       faculties: [
-        {'name': 'фі', 'text': 'Інформатикам'},
-        {'name': 'фпрн', 'text': 'Природничникам'},
-        {'name': 'фпвн', 'text': 'Правникам'},
-        {'name': 'фен', 'text': 'Економістам'},
-        {'name': 'фгн', 'text': 'Гуманітаріям'},
-        {'name': 'фснст', 'text': 'Соціологам'}
+        {'name': 'фі', 'text': 'ФІ'},
+        {'name': 'фпрн', 'text': 'ФПрН'},
+        {'name': 'фпвн', 'text': 'ФПвН'},
+        {'name': 'фен', 'text': 'ФЕН'},
+        {'name': 'фгн', 'text': 'ФГН'},
+        {'name': 'фснст', 'text': 'ФСНСТ'}
       ]
     }
   },
@@ -161,30 +42,14 @@ export default {
 </script>
 
 <style lang="scss">
+
+  .faculty_tail {
+    height: 10em;
+    display: inline-block;
+  }
+
   body {
     min-width: 320px;
-  }
-
-  .faculty {
-    font-size: 2em;
-  }
-
-  .specialty {
-    border: 1px solid #0FA0CE;
-  }
-
-  .year {
-    span {
-      text-align: center;
-      background-color: #555555;
-    }
-  }
-
-  .tremester {
-    span {
-      text-align: center;
-      background-color: #0FA0CE;
-    }
   }
 
   .blocks {
@@ -193,22 +58,78 @@ export default {
     border: 2px solid #cecece;
     vertical-align: middle;
     list-style: none;
-    font-size: 2em;
-    margin: 20px;
+    font-size: 3em;
+    margin: 4px 4px 4px 0;
+    height: 5em;;
     cursor: pointer;
     text-align: center;
   }
+  header {
+    h1 {
+      span {
+        display: none;
+      }
+    }
+  }
 
-  li:hover {
-    border: 2px solid #8A2BE2;
+  /* Larger than mobile */
+  @media (min-width: 320px) {
+
+    .blocks {
+      display: inline-block;
+      border-radius: 6px;
+      border: 2px solid #cecece;
+      vertical-align: middle;
+      list-style: none;
+      font-size: 2.9em;
+      margin: 2px;
+      height: 1.5em;;
+      cursor: pointer;
+      text-align: center;
+    }
   }
 
   /* Larger than mobile */
   @media (min-width: 400px) {
 
+    .blocks {
+      display: inline-block;
+      border-radius: 6px;
+      border: 2px solid #cecece;
+      vertical-align: middle;
+      list-style: none;
+      font-size: 2.9em;
+      margin: 2px;
+      height: 2em;;
+      cursor: pointer;
+      text-align: center;
+    }
   }
 
-  @media (min-width: 550px) {
+  @media (min-width: 550px) and (min-height: 768px) {
+    .column:first-child, .columns:first-child {}
+    header {
+      h1 {
+        span {
+          display: inline-block;
+          font-size: 0.4em;
+        }
+      }
+    }
+
+    .blocks {
+      display: inline-block;
+      border-radius: 6px;
+      border: 2px solid #cecece;
+      vertical-align: middle;
+      list-style: none;
+      font-size: 3em;
+      margin: 4px 4px 4px 0;
+      height: 5em;;
+      cursor: pointer;
+      text-align: center;
+    }
+
     #marks {
       li {
         display: inline-block;
@@ -217,7 +138,7 @@ export default {
         vertical-align: middle;
         list-style: none;
         font-size: 1.5em;
-        margin: 20px;
+        margin: 4px 4px 4px 0;
         cursor: pointer;
         text-align: center;
         width: 200px;
@@ -231,6 +152,14 @@ export default {
 
   /* Larger than tablet */
   @media (min-width: 750px) {
+    header {
+      h1 {
+        span {
+          display: inline-block;
+          font-size: 0.5em;
+        }
+      }
+    }
   }
 
   /* Larger than desktop */
@@ -258,6 +187,5 @@ export default {
     }
   }
 
-
-</style>
+  </style>
 

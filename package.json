@@ -15,6 +15,7 @@
     "sass-loader": "^4.0.2",
     "vue": "^2.0.1",
     "vue-router": "^2.0.1",
+    "vue-touch": "git://github.com/vuejs/vue-touch.git#next",
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
