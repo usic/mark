@@ -1,14 +1,7 @@
-<template xmlns:v-on="http://www.w3.org/1999/xhtml">
-  <div id="app" class="container ">
-    <ul class="row faculties">
-      <li v-for="(value, key) in faculties" class="six columns blocks" v-on:click="chooseFaculty" :id="key"
-          v-if="!facultyChoose" @click="facultyChoose = true">{{ key }}
-      </li>
-    </ul>
+<template>
+  <div id="app" class="container">
 
-    <ul class="row professions" v-if="facultyChoose">
-      <li v-for="(value, key) in professions" class="eight columns">{{ value|truncate }}</li>
-    </ul>
+    <router-view class="view"></router-view>
   </div>
 </template>
 
@@ -16,42 +9,7 @@
 export default {
   name: 'app',
   data: function () {
-    return {
-      facultyChoose: false,
-      professions: Array,
-      faculties: {
-        ФІ: [
-          'Інформатика',
-          'Прикладна математика',
-          'Програмна інженерія'
-        ],
-        ФГН: [
-          'Історія',
-          'Культурологія',
-          'Філологія',
-          'Філософія'
-        ],
-        ФПрН: [
-          'Біологія',
-          'Екологія, охорона навколишнього середовища та збалансоване природокористування',
-          'Фізика',
-          'Хімія'
-        ],
-        ФЕН: [
-          'Економічна теорія',
-          'Маркетинг',
-          'Фінанси і кредит'
-        ],
-        ФСНСТ: [
-          'Політологія',
-          'Соціальна робота',
-          'Соціологія'
-        ],
-        ФПвН: [
-          'Правознавство'
-        ]
-      }
-    }
+    return {}
   },
   filters: {
     truncate: function (value, length = 20) {
@@ -76,10 +34,6 @@ export default {
       } else {
         return 0
       }
-    },
-    chooseFaculty: function (event) {
-      var faculty = event.target.id
-      this.professions = (this.faculties[faculty])
     }
   }
 }
@@ -125,9 +79,9 @@ export default {
       border: 2px solid #cecece;
       vertical-align: middle;
       list-style: none;
-      font-size: 2.9em;
+      font-size: 2em;
       margin: 2px 2px 2px 0;
-      height: 1.5em;;
+      height: 2em;;
       cursor: pointer;
       text-align: center;
     }
@@ -136,6 +90,12 @@ export default {
       li {
         font-size: 1.5em;
       }
+    }
+
+    .container {
+      padding:5px;
+      margin:0 auto;
+      width:96%;
     }
   }
 
@@ -174,7 +134,7 @@ export default {
       border: 2px solid #cecece;
       vertical-align: middle;
       list-style: none;
-      font-size: 3em;
+      font-size: 2em;
       margin: 4px 4px 4px 0;
       height: 5em;;
       cursor: pointer;

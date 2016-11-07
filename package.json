@@ -14,9 +14,11 @@
     "node-sass": "^3.10.1",
     "sass-loader": "^4.0.2",
     "vue": "^2.0.1",
+    "vue-resource": "^1.0.3",
     "vue-router": "^2.0.1",
     "vue-touch": "git://github.com/vuejs/vue-touch.git#next",
-    "whatwg-fetch": "^1.0.0"
+    "whatwg-fetch": "^1.0.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
