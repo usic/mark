@@ -1,6 +1,5 @@
 <template>
   <div id="app" class="container">
-
     <router-view class="view"></router-view>
   </div>
 </template>
@@ -21,33 +20,22 @@ export default {
 
       return value.substring(0, length) + '...'
     }
-  },
-  methods: {
-    getTrimester: function () {
-      var date = new Date()
-      if (date.getMonth() > 8 && date.getMonth() < 11) {
-        return 1
-      } else if (date.getMonth() > 0 && date.getMonth() < 3) {
-        return 2
-      } else if (date.getMonth() > 3 && date.getMonth() < 5) {
-        return 3
-      } else {
-        return 0
-      }
-    }
   }
 }
 </script>
 
 <style lang="scss">
 
-  .faculty_tail {
-    height: 10em;
-    display: inline-block;
-  }
-
   body {
     min-width: 320px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .title {
+    color: #555555;
   }
 
   .blocks {

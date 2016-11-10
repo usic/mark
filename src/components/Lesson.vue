@@ -1,10 +1,18 @@
 <template>
     <div id="app">
-      <div v-if="loading" class="loader"></div>
+
       <div v-if="!loading" class="container">
         <ul class="row lessons">
-            <li v-for="lesson in lessons" class="ten columns">
-                {{ lesson.name | removeBrackets | truncate }} <input type="number" v-model.number="lesson.mark" onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
+            <li v-for="lesson in lessons" class="twelve columns">
+              <div class="row">
+                <span>
+                  {{ lesson.name | removeBrackets | truncate}}
+                </span>
+                <span class="marks">
+                  <input type="number" v-model.number="lesson.mark" onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
+                  <span @click="removeLesson(lesson)" title="Видалити предмет"> &nbsp;X </span>
+                </span>
+              </div>
             </li>
         </ul>
         <div id="rating">
@@ -53,7 +61,7 @@ export default {
       }
       return string
     },
-    truncate: function (value, length = 25) {
+    truncate: function (value, length = 30) {
       if (value.length < length) {
         return value
       }
@@ -61,7 +69,7 @@ export default {
       length = length - 3
       var begin = Math.round(length / 2)
       var end = length - begin
-      console.log(end)
+
       return value.substring(0, begin) + '...' + value.slice(-end)
     }
   },
@@ -85,19 +93,34 @@ export default {
         self.lessons = lessonsArray
       }
       xhr.send()
+    },
+    getTrimester: function () {
+      var date = new Date()
+      if (date.getMonth() > 8 && date.getMonth() < 11) {
+        return 1
+      } else if (date.getMonth() > 0 && date.getMonth() < 3) {
+        return 2
+      } else if (date.getMonth() > 3 && date.getMonth() < 5) {
+        return 3
+      } else {
+        return 0
+      }
+    },
+    removeLesson: function (lesson) {
+      this.lessons.splice(this.lessons.indexOf(lesson), 1)
     }
   }
 }
 </script>
 <style lang="scss">
 .loader {
-    border: 16px solid #f3f3f3; /* Light grey */
-    border-top: 16px solid #3498db; /* Blue */
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid #3498db; /* Blue */
     border-radius: 50%;
     width: 120px;
     height: 120px;
-    animation: spin 1s linear infinite;
-    margin:0 auto;
+    animation: spin 0.5s linear infinite;
+    margin:0 auto;;
 }
 
 @keyframes spin {
@@ -113,15 +136,22 @@ export default {
     margin-left: 5px;
   }
 
-  li:first-child {
-    margin-left:5px;
-  }
 
-  input {
-    margin:2px;
-    padding:2px;
-    width:5em;
+
+  .marks {
     float:right;
+    span {
+      cursor: pointer;
+    }
+
+    span:hover {
+      color: #AEAEAE;
+    }
+    input{
+      margin:2px;
+      padding:2px;
+      width:5em;
+    }
   }
 }
 </style>

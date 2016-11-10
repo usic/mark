@@ -3,9 +3,6 @@
         <ul class="row faculties">
             <router-link v-for="(value, key) in professions" :id="value" class="six columns blocks" :to="{ name: 'year', params: { faculty: $route.params.faculty, profession: value }}" tag="li">
                 {{ value | truncate }}
-              <!--<ul>-->
-                <!--<li v-for="n in 4" class="year">{{ n }}</li>-->
-              <!--</ul>-->
             </router-link>
         </ul>
     </div>

@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "eslint-plugin-promise": "^2.0.1",
+    "materialize-css": "^0.97.8",
     "node-sass": "^3.10.1",
     "sass-loader": "^4.0.2",
     "vue": "^2.0.1",
+    "vue-materials": "^1.0.3-rc.4",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.0.1",
     "vue-touch": "git://github.com/vuejs/vue-touch.git#next",
